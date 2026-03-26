@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="card">
+
+    <h2>Create Account</h2>
+
+    <!-- ✅ MESSAGE DISPLAY -->
+    <p class="message" *ngIf="message">{{ message }}</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <input type="text" formControlName="name" placeholder="Enter your name">
+
+      <input type="email" formControlName="email" placeholder="Enter your email">
+
+      <input type="password" formControlName="password" placeholder="Enter your password">
+
+      <button type="submit">CREATE ACCOUNT</button>
+
+    </form>
+
+    <a routerLink="/login">Already have an account? Login</a>
+
+  </div>
+</div>
