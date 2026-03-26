@@ -1,0 +1,52 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Book a Slot</h2>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+
+    @if (availableSlots.length === 0) {
+      <div class="empty-msg">
+        <p>No available slots right now. Check back later.</p>
+      </div>
+    } @else {
+      <div class="slots-list">
+        @for (slot of availableSlots; track slot.slotID) {
+          <div
+            class="slot-option"
+            [class.selected]="selectedSlotId === slot.slotID"
+            (click)="selectSlot(slot.slotID)"
+          >
+            <div class="slot-radio">
+              @if (selectedSlotId === slot.slotID) {
+                <div class="radio-fill"></div>
+              }
+            </div>
+            <div class="slot-info">
+              <span class="slot-time-label">{{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (error) {
+      <div class="modal-error">{{ error }}</div>
+    }
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+      <button
+        class="btn-confirm"
+        [disabled]="!selectedSlotId || booking"
+        (click)="confirmBooking()"
+      >
+        @if (booking) {
+          Booking...
+        } @else {
+          Confirm Booking
+        }
+      </button>
+    </div>
+  </div>
+</div>

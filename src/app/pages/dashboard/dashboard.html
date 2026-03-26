@@ -1,0 +1,97 @@
+<app-navbar />
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div>
+      <h1 class="page-title">Appointments & Schedule</h1>
+      <p class="greeting">Hello, <strong>{{ userName }}</strong></p>
+    </div>
+    <button class="btn-primary" (click)="openBookModal()">
+      + New Booking
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your schedule...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-banner">
+      {{ error }}
+      <button class="retry-btn" (click)="loadData()">Retry</button>
+    </div>
+  }
+
+  @if (!loading) {
+    <section class="section">
+      <h2 class="section-title">Booked Slots</h2>
+      @if (myAppointments.length === 0) {
+        <div class="empty-state">
+          <p>No appointments yet. Book a slot to get started.</p>
+        </div>
+      } @else {
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Slot Time</th>
+                <th>Status</th>
+                <th>Booked At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (appt of myAppointments; track appt.appointmentID) {
+                <tr>
+                  <td>{{ formatTime(appt.slotStartTime) }} – {{ formatTime(appt.slotEndTime) }}</td>
+                  <td>
+                    <span class="status-badge booked">{{ appt.status }}</span>
+                  </td>
+                  <td>{{ appt.bookedAt | date:'medium' }}</td>
+                  <td>
+                    <button class="btn-cancel" (click)="cancelAppointment(appt.appointmentID)">
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    @if (slots.length > 0) {
+      <section class="section">
+        <h2 class="section-title">All Slots</h2>
+        <div class="slot-grid">
+          @for (slot of slots; track slot.slotID) {
+            <div class="slot-card" [class.booked]="slot.isBooked">
+              <div class="slot-time">
+                {{ formatTime(slot.startTime) }} – {{ formatTime(slot.endTime) }}
+              </div>
+              <div class="slot-status">
+                @if (slot.isBooked) {
+                  <span class="status-badge booked">Booked</span>
+                } @else {
+                  <span class="status-badge free">Available</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>
+
+@if (showBookModal) {
+  <app-book-modal
+    [availableSlots]="getAvailableSlots()"
+    (close)="onModalClose()"
+    (booked)="onSlotBooked()"
+  />
+}

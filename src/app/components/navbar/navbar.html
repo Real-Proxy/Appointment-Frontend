@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="brand-icon">📅</span>
+    <span class="brand-text">BookEase</span>
+  </div>
+
+  <div class="nav-user" (click)="toggleDropdown()">
+    <span class="user-name">{{ userName }}</span>
+    <div class="avatar">{{ userName.charAt(0).toUpperCase() }}</div>
+    <span class="dropdown-arrow">▼</span>
+
+    @if (showDropdown) {
+      <div class="dropdown">
+        <button class="dropdown-item" (click)="logout()">
+          ⏻ Logout
+        </button>
+      </div>
+    }
+  </div>
+</nav>
